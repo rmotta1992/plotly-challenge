@@ -17,8 +17,42 @@ function buildMetadata(sampleId){
 }
 
 function buildCharts(sampleId) {
-  console.log("I'm in build charts")
-}
+  d3.json("../data/samples.json").then((data) => {
+    console.log("I'm in build charts");
+    var samples = data.samples;
+    var idArray = samples.filter((x) => x.id == sampleId);
+    var result2 = idArray[0]
+    var barPanel = d3.select('#bar');
+
+    barPanel.html("");
+
+    Object.entries(result2).forEach(([k,v]) => {
+      barPanel.append("bar2").text(`${k.toUpperCase()}: ${v}`)
+
+    });
+    
+    
+    
+    var sampleValues = data.samples.sample_values;
+    var otuIds = data.samples.otu_ids;
+    var valueArray = sampleValues.filter((x) => x.sample_values == sampleId);
+    var otuLabels = data.samples.otu_labels;
+    var chartPanel = d3.select("#bar")
+
+  var trace1 = {
+    x: otuIds,
+    y: valueArray,
+    type : "bar",
+    orientation: "h"
+  };
+  var barData = [trace1]
+    
+  Plotly.newPlot("bar2", barData)
+
+    
+  });
+};
+//}
 
 d3.json("../data/samples.json").then(function(data) {
   console.log(data);
@@ -64,6 +98,16 @@ d3.json("../data/samples.json").then(function(data) {
 function init() {
   
 }
+// var trace1 = {
+//   x: [5,6,7],
+//   y: ["a", "b", "c"],
+//   type : "bar",
+//   orientation: "h"
+// };
+// var barData = [trace1]
+  
+// Plotly.newPlot("bar", barData)
+
 
 //d3.select("#selDataset").on("click", handleSubmit);
 
